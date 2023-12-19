@@ -41,7 +41,7 @@ import {
     MAX_CACHE_AGE,
     TOAST_ACTION_VIEW_WISHLIST,
     TOAST_MESSAGE_ADDED_TO_WISHLIST,
-    TOAST_MESSAGE_ALREADY_IN_WISHLIST
+    TOAST_MESSAGE_REMOVED_FROM_WISHLIST
 } from '@salesforce/retail-react-app/app/constants'
 import {rebuildPathWithParams} from '@salesforce/retail-react-app/app/utils/url'
 import {useHistory, useLocation, useParams} from 'react-router-dom'
@@ -158,11 +158,17 @@ const ProductDetail = () => {
         'createCustomerProductListItem'
     )
 
-    const handleAddToWishlist = (product, variant, quantity) => {
-        const isItemInWishlist = wishlist?.customerProductListItems?.find(
-            (i) => i.productId === variant?.productId || i.productId === product?.id
-        )
+    const deleteCustomerProductListItem = useShopperCustomersMutation(
+        'deleteCustomerProductListItem'
+    )
 
+    const isItemInWishlist = wishlist?.customerProductListItems?.find(
+        (i) => i.productId === variant?.productId || i.productId === product?.id
+    )
+
+    const isInWishlists = isItemInWishlist ? true : false;
+
+    const handleAddToWishlist = (product, variant, quantity) => {
         if (!isItemInWishlist) {
             createCustomerProductListItem.mutate(
                 {
@@ -204,16 +210,39 @@ const ProductDetail = () => {
                     }
                 }
             )
-        } else {
-            toast({
-                title: formatMessage(TOAST_MESSAGE_ALREADY_IN_WISHLIST),
-                status: 'info',
-                action: (
-                    <Button variant="link" onClick={() => navigate('/account/wishlist')}>
-                        {formatMessage(TOAST_ACTION_VIEW_WISHLIST)}
-                    </Button>
-                )
-            })
+        }
+    }
+
+    const handleRemoveFromWishlist = () => {
+        if (isItemInWishlist) {
+            deleteCustomerProductListItem.mutate(
+                {
+                    parameters: {
+                        listId: wishlist.id,
+                        customerId,
+                        itemId: isItemInWishlist?.id
+                    }
+                },
+                {
+                    onSuccess: () => {
+                        toast({
+                            title: formatMessage(TOAST_MESSAGE_REMOVED_FROM_WISHLIST, {quantity: 1}),
+                            status: 'success',
+                            action: (
+                                <Button
+                                    variant="link"
+                                    onClick={() => navigate('/account/wishlist')}
+                                >
+                                    {formatMessage(TOAST_ACTION_VIEW_WISHLIST)}
+                                </Button>
+                            )
+                        })
+                    },
+                    onError: () => {
+                        showError()
+                    }
+                }
+            )
         }
     }
 
@@ -330,7 +359,8 @@ const ProductDetail = () => {
                             product={product}
                             category={primaryCategory?.parentCategoryTree || []}
                             addToCart={handleProductSetAddToCart}
-                            addToWishlist={handleAddToWishlist}
+                            addToWishlist={!isInWishlists ? handleAddToWishlist : null}
+                            removeFromWishlist={isInWishlists ? handleRemoveFromWishlist : null}
                             isProductLoading={isProductLoading}
                             isBasketLoading={isBasketLoading}
                             isWishlistLoading={isWishlistLoading}
@@ -361,7 +391,8 @@ const ProductDetail = () => {
                                                 {product: childProduct, variant, quantity}
                                             ])
                                         }
-                                        addToWishlist={handleAddToWishlist}
+                                        addToWishlist={!isInWishlists ? handleAddToWishlist : null}
+                                        removeFromWishlist={isInWishlists ? handleRemoveFromWishlist : null}
                                         onVariantSelected={(product, variant, quantity) => {
                                             if (quantity) {
                                                 setProductSetSelection((previousState) => ({
@@ -381,6 +412,7 @@ const ProductDetail = () => {
                                         isProductLoading={isProductLoading}
                                         isBasketLoading={isBasketLoading}
                                         isWishlistLoading={isWishlistLoading}
+                                        isInWishlists={isInWishlists}
                                     />
                                     <InformationAccordion product={childProduct} />
 
@@ -399,10 +431,12 @@ const ProductDetail = () => {
                             addToCart={(variant, quantity) =>
                                 handleAddToCart([{product, variant, quantity}])
                             }
-                            addToWishlist={handleAddToWishlist}
+                            addToWishlist={!isInWishlists ? handleAddToWishlist : null}
+                            removeFromWishlist={isInWishlists ? handleRemoveFromWishlist : null}
                             isProductLoading={isProductLoading}
                             isBasketLoading={isBasketLoading}
                             isWishlistLoading={isWishlistLoading}
+                            isInWishlists={isInWishlists}
                         />
                         <InformationAccordion product={product} />
                     </Fragment>

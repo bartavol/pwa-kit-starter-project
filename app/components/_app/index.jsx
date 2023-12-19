@@ -25,11 +25,14 @@ import {
 import * as queryKeyHelpers from '@salesforce/commerce-sdk-react/hooks/ShopperProducts/queryKeyHelpers'
 // Chakra
 import {
+    Text,
     Box,
     useDisclosure,
     useStyleConfig
 } from '@salesforce/retail-react-app/app/components/shared/ui'
 import {SkipNavLink, SkipNavContent} from '@chakra-ui/skip-nav'
+import {InfoOutlineIcon} from '@chakra-ui/icons'
+
 
 // Contexts
 import {CurrencyProvider} from '@salesforce/retail-react-app/app/contexts'
@@ -79,6 +82,11 @@ import Seo from '@salesforce/retail-react-app/app/components/seo'
 import {Helmet} from 'react-helmet'
 
 const onClient = typeof window !== 'undefined'
+
+const GEO_LOCATION = {
+    lat: '34.052235',
+    long: '-118.243683'
+}
 
 /*
 The categories tree can be really large! For performance reasons,
@@ -131,6 +139,8 @@ const App = (props) => {
 
     const {isOpen, onOpen, onClose} = useDisclosure()
 
+    const [closestStore, setClosestStore] = useState(undefined)
+
     const targetLocale = getTargetLocale({
         getUserPreferredLocales: () => {
             // CONFIG: This function should return an array of preferred locales. They can be
@@ -172,7 +182,7 @@ const App = (props) => {
     // Fetch the privacy policy content asset
     const {data: privacyPolicy} = useQuery({
         queryKey: ['footerpolicy'],
-        queryFn: () => { return fetch(`http://localhost:3000/mobify/proxy/ocapi/s/<Key Value: Site ID>/dw/shop/v20_2/content/privacy-policy?client_id=<Key Value: Commerce API client ID>`).then(res=>res.json()).then((json) => {
+        queryFn: () => { return fetch(`${getAppOrigin()}/mobify/proxy/ocapi/s/RefArch/dw/shop/v20_2/content/privacy-policy?client_id=8e90cc31-f040-4dcf-95b6-2c5451c15b48`).then(res=>res.json()).then((json) => {
             console.log(json)
             return json
         })
@@ -241,6 +251,20 @@ const App = (props) => {
         watchOnlineStatus((isOnline) => {
             setIsOnline(isOnline)
         })
+
+        const fetchStore = async () => {
+            const res = await fetch(
+                `${getAppOrigin()}/mobify/proxy/ocapi/s/RefArch/dw/shop/v20_2/stores?latitude=${GEO_LOCATION.lat}&longitude=${GEO_LOCATION.long}&client_id=8e90cc31-f040-4dcf-95b6-2c5451c15b48`
+            )
+            if (res.ok) {
+                const storeResult = await res.json()
+                const firstStore = storeResult.data[0]
+                if (firstStore) {
+                    setClosestStore(firstStore)
+                }
+            }
+        }
+        fetchStore()
     }, [])
 
     useEffect(() => {
@@ -398,6 +422,26 @@ const App = (props) => {
                                 )}
                             </Box>
                             {!isOnline && <OfflineBanner />}
+
+                            {closestStore && (
+                                <Box
+                                    bg="blue.500"
+                                    w="100%"
+                                    display="flex"
+                                    justifyContent="center"
+                                    alignItems="center"
+                                    p={2}
+                                    color="white"
+                                >
+                                    <InfoOutlineIcon />
+                                    <Text fontWeight="bold" pl={1}>Closest Store: </Text>
+                                    <Text pl={2}>
+                                        {closestStore.name} - {closestStore.address1},{' '}
+                                        {closestStore.state_code}, {closestStore.postal_code}
+                                    </Text>
+                                </Box>
+                            )}
+
                             <AddToCartModalProvider>
                                 <SkipNavContent
                                     style={{

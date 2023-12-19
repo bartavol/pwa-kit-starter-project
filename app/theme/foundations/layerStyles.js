@@ -37,6 +37,6 @@ export default {
         maxWidth: 'container.xxxl',
         marginLeft: 'auto',
         marginRight: 'auto',
-        backgroundColor: "blue"
+        backgroundColor: "lightgray"
     }
 }

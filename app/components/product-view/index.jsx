@@ -19,10 +19,13 @@ import {
     Text,
     VStack,
     Fade,
-    useTheme
+    useTheme,
+    Tooltip,
+    Spinner
 } from '@salesforce/retail-react-app/app/components/shared/ui'
 import {useDerivedProduct} from '@salesforce/retail-react-app/app/hooks'
 import {useAddToCartModalContext} from '@salesforce/retail-react-app/app/hooks/use-add-to-cart-modal'
+import {usePromotions} from '@salesforce/commerce-sdk-react'
 
 // project components
 import SwatchGroup from '@salesforce/retail-react-app/app/components/swatch-group'
@@ -93,6 +96,7 @@ const ProductView = forwardRef(
             updateCart,
             addToWishlist,
             updateWishlist,
+            removeFromWishlist,
             isProductLoading,
             isProductPartOfSet = false,
             isBasketLoading = false,
@@ -102,6 +106,21 @@ const ProductView = forwardRef(
         },
         ref
     ) => {
+        const [activePromotionId, setActivePromotionId] = useState(undefined) // this is the hovered over promotion, set onOpen, removed onClose
+        const {productPromotions} = product || {} // this destructures productPromotions from the product API call, used in the iterator loop to show promo calloutMsg
+
+        const {data: promotions} = usePromotions(
+            {
+                parameters: {
+                    ids: activePromotionId
+                }
+            },
+            {
+                enabled: !isProductLoading
+            }
+        )
+        const promos = promotions?.data || [] //this takes the response from the hook above, and sets it in "promos" - this is what we'll use to build the tooltip.
+
         const showToast = useToast()
         const intl = useIntl()
         const history = useHistory()
@@ -172,6 +191,10 @@ const ProductView = forwardRef(
                 addSetToWishlist: intl.formatMessage({
                     defaultMessage: 'Add Set to Wishlist',
                     id: 'product_view.button.add_set_to_wishlist'
+                }),
+                removeFromWishlist: intl.formatMessage({
+                    defaultMessage: 'Remove from Wishlist',
+                    id: 'product_view.button.remove_from_wishlist'
                 })
             }
 
@@ -211,9 +234,14 @@ const ProductView = forwardRef(
             }
 
             const handleWishlistItem = async () => {
-                if (!updateWishlist && !addToWishlist) return null
+                if (!updateWishlist && !addToWishlist && !removeFromWishlist) return null
                 if (updateWishlist) {
                     updateWishlist(product, variant, quantity)
+                    return
+                }
+
+                if (removeFromWishlist) {
+                    removeFromWishlist()
                     return
                 }
                 addToWishlist(product, variant, quantity)
@@ -239,7 +267,7 @@ const ProductView = forwardRef(
                 )
             }
 
-            if (addToWishlist || updateWishlist) {
+            if (addToWishlist || updateWishlist || removeFromWishlist) {
                 buttons.push(
                     <ButtonWithRegistration
                         key="wishlist-button"
@@ -250,7 +278,9 @@ const ProductView = forwardRef(
                         variant="outline"
                         marginBottom={4}
                     >
-                        {updateWishlist
+                        {removeFromWishlist
+                            ? buttonText.removeFromWishlist
+                            : updateWishlist
                             ? buttonText.update
                             : isProductASet
                             ? buttonText.addSetToWishlist
@@ -493,6 +523,35 @@ const ProductView = forwardRef(
                             {isProductASet && <p>{product?.shortDescription}</p>}
                         </VStack>
 
+                         {/* Show Promotions: productPromotions is the array to loop over */}
+                        <Text>Available promotions:</Text>
+                        {/* productPromotions is destructured from prooduct.productPromotions
+                            That loop will build each line.  We wiil then call the setActivePromotionId method, which will prompt
+                            a re-render of the React SDK usePromotions, which will return a "promotions" object that is set to "Promos"
+                            Because we are fetching ONLY a single promotion, we can reference the "details" attribute
+                            of the first element returned.
+                        */}
+
+                        {productPromotions &&
+                            productPromotions.map(({promotionId, calloutMsg}) => (
+                                <Tooltip
+                                    onOpen={() => {
+                                        setActivePromotionId(promotionId)
+                                    }}
+                                    onClose={() => {
+                                        setActivePromotionId(undefined)
+                                    }}
+                                    key={promotionId}
+                                    label={
+                                        (promos?.[0]?.details) || (<Spinner/>)
+                                    }
+                                    aria-label="Promotion details"
+                                >
+                                    <Text>{calloutMsg}</Text>
+                                </Tooltip>
+                            ))
+                        }
+
                         <Box>
                             {!showLoading && showInventoryMessage && (
                                 <Fade in={true}>
@@ -544,6 +603,7 @@ ProductView.propTypes = {
     addToWishlist: PropTypes.func,
     updateCart: PropTypes.func,
     updateWishlist: PropTypes.func,
+    removeFromWishlist: PropTypes.func,
     showFullLink: PropTypes.bool,
     imageSize: PropTypes.oneOf(['sm', 'md']),
     onVariantSelected: PropTypes.func,
