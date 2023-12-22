@@ -1,12 +1,12 @@
 {
   "name": "client",
-  "hash": "2a75e9cf9ba5fea9e828",
+  "hash": "9b1f831aa245e5dd3c2f",
   "publicPath": "/mobify/bundle/development/",
   "outputPath": "D:\\CODE\\Practice\\pwa-training\\pwa-kit-starter-project\\build",
   "assetsByChunkName": {
     "main": [
       "main.js",
-      "main.578d043247adf22703fb.hot-update.js"
+      "main.eb2a94975d2911376710.hot-update.js"
     ],
     "pages-home": [
       "pages-home.js"
@@ -88,7 +88,7 @@
     {
       "type": "asset",
       "name": "main.js",
-      "size": 1189193,
+      "size": 1189574,
       "emitted": false,
       "comparedForEmit": false,
       "cached": true,
@@ -163,7 +163,7 @@
     {
       "type": "asset",
       "name": "pages-product-list.js",
-      "size": 125812,
+      "size": 136674,
       "emitted": false,
       "comparedForEmit": false,
       "cached": true,
@@ -188,7 +188,7 @@
     {
       "type": "asset",
       "name": "app_components_product-view_index_jsx.js",
-      "size": 74069,
+      "size": 74090,
       "emitted": false,
       "comparedForEmit": false,
       "cached": true,
@@ -211,7 +211,7 @@
     {
       "type": "asset",
       "name": "pages-cart.js",
-      "size": 73548,
+      "size": 73553,
       "emitted": false,
       "comparedForEmit": false,
       "cached": true,
@@ -405,7 +405,7 @@
     {
       "type": "asset",
       "name": "app_components_confirmation-modal_index_jsx-app_components_product-item_index_jsx-app_compone-5d0c1c.js",
-      "size": 38284,
+      "size": 38301,
       "emitted": false,
       "comparedForEmit": false,
       "cached": true,
@@ -427,17 +427,17 @@
     },
     {
       "type": "asset",
-      "name": "app_components_product-view_index_jsx.578d043247adf22703fb.hot-update.js",
-      "size": 34479,
+      "name": "app_components_product-view_index_jsx.eb2a94975d2911376710.hot-update.js",
+      "size": 34500,
       "emitted": false,
       "comparedForEmit": false,
       "cached": true,
       "info": {
         "hotModuleReplacement": true,
         "immutable": true,
-        "fullhash": "578d043247adf22703fb",
+        "fullhash": "eb2a94975d2911376710",
         "related": {
-          "sourceMap": "app_components_product-view_index_jsx.578d043247adf22703fb.hot-update.js.map"
+          "sourceMap": "app_components_product-view_index_jsx.eb2a94975d2911376710.hot-update.js.map"
         }
       },
       "chunkNames": [],
@@ -627,7 +627,7 @@
     },
     {
       "type": "asset",
-      "name": "main.578d043247adf22703fb.hot-update.js",
+      "name": "main.eb2a94975d2911376710.hot-update.js",
       "size": 364,
       "emitted": false,
       "comparedForEmit": false,
@@ -635,9 +635,9 @@
       "info": {
         "hotModuleReplacement": true,
         "immutable": true,
-        "fullhash": "578d043247adf22703fb",
+        "fullhash": "eb2a94975d2911376710",
         "related": {
-          "sourceMap": "main.578d043247adf22703fb.hot-update.js.map"
+          "sourceMap": "main.eb2a94975d2911376710.hot-update.js.map"
         }
       },
       "chunkNames": [
@@ -677,7 +677,7 @@
     },
     {
       "type": "asset",
-      "name": "main.578d043247adf22703fb.hot-update.json",
+      "name": "main.eb2a94975d2911376710.hot-update.json",
       "size": 68,
       "emitted": false,
       "comparedForEmit": false,
@@ -685,7 +685,7 @@
       "info": {
         "hotModuleReplacement": true,
         "immutable": true,
-        "fullhash": "578d043247adf22703fb"
+        "fullhash": "eb2a94975d2911376710"
       },
       "chunkNames": [],
       "chunkIdHints": [],
@@ -710,7 +710,7 @@
           "name": "main.js"
         },
         {
-          "name": "main.578d043247adf22703fb.hot-update.js"
+          "name": "main.eb2a94975d2911376710.hot-update.js"
         }
       ],
       "filteredAssets": 0,
@@ -791,8 +791,8 @@
     "pages-account": {
       "name": "pages-account",
       "chunks": [
-        "app_components_item-variant_item-attributes_jsx-app_components_item-variant_item-image_jsx-ap-c1a2e1",
         "app_components_product-view_index_jsx",
+        "app_components_item-variant_item-attributes_jsx-app_components_item-variant_item-image_jsx-ap-c1a2e1",
         "app_components_order-summary_index_jsx",
         "app_components_confirmation-modal_index_jsx-app_components_product-item_index_jsx-app_compone-5d0c1c",
         "app_components_action-card_index_jsx-app_components_address-display_index_jsx-app_components_-8b77ee",
@@ -801,13 +801,13 @@
       ],
       "assets": [
         {
-          "name": "app_components_item-variant_item-attributes_jsx-app_components_item-variant_item-image_jsx-ap-c1a2e1.js"
-        },
-        {
           "name": "app_components_product-view_index_jsx.js"
         },
         {
-          "name": "app_components_product-view_index_jsx.578d043247adf22703fb.hot-update.js"
+          "name": "app_components_product-view_index_jsx.eb2a94975d2911376710.hot-update.js"
+        },
+        {
+          "name": "app_components_item-variant_item-attributes_jsx-app_components_item-variant_item-image_jsx-ap-c1a2e1.js"
         },
         {
           "name": "app_components_order-summary_index_jsx.js"
@@ -835,21 +835,21 @@
     "pages-cart": {
       "name": "pages-cart",
       "chunks": [
-        "app_components_item-variant_item-attributes_jsx-app_components_item-variant_item-image_jsx-ap-c1a2e1",
         "app_components_product-view_index_jsx",
+        "app_components_item-variant_item-attributes_jsx-app_components_item-variant_item-image_jsx-ap-c1a2e1",
         "app_components_order-summary_index_jsx",
         "app_components_confirmation-modal_index_jsx-app_components_product-item_index_jsx-app_compone-5d0c1c",
         "pages-cart"
       ],
       "assets": [
         {
-          "name": "app_components_item-variant_item-attributes_jsx-app_components_item-variant_item-image_jsx-ap-c1a2e1.js"
-        },
-        {
           "name": "app_components_product-view_index_jsx.js"
         },
         {
-          "name": "app_components_product-view_index_jsx.578d043247adf22703fb.hot-update.js"
+          "name": "app_components_product-view_index_jsx.eb2a94975d2911376710.hot-update.js"
+        },
+        {
+          "name": "app_components_item-variant_item-attributes_jsx-app_components_item-variant_item-image_jsx-ap-c1a2e1.js"
         },
         {
           "name": "app_components_order-summary_index_jsx.js"
@@ -950,7 +950,7 @@
           "name": "app_components_product-view_index_jsx.js"
         },
         {
-          "name": "app_components_product-view_index_jsx.578d043247adf22703fb.hot-update.js"
+          "name": "app_components_product-view_index_jsx.eb2a94975d2911376710.hot-update.js"
         },
         {
           "name": "pages-product-detail.js"
@@ -966,16 +966,23 @@
     "pages-product-list": {
       "name": "pages-product-list",
       "chunks": [
+        "app_components_product-view_index_jsx",
         "pages-product-list"
       ],
       "assets": [
+        {
+          "name": "app_components_product-view_index_jsx.js"
+        },
+        {
+          "name": "app_components_product-view_index_jsx.eb2a94975d2911376710.hot-update.js"
+        },
         {
           "name": "pages-product-list.js"
         }
       ],
       "filteredAssets": 0,
       "assetsSize": null,
-      "filteredAuxiliaryAssets": 1,
+      "filteredAuxiliaryAssets": 3,
       "auxiliaryAssetsSize": null,
       "children": {},
       "childAssets": {}
@@ -983,20 +990,20 @@
     "pages-account-wishlist": {
       "name": "pages-account-wishlist",
       "chunks": [
-        "app_components_item-variant_item-attributes_jsx-app_components_item-variant_item-image_jsx-ap-c1a2e1",
         "app_components_product-view_index_jsx",
+        "app_components_item-variant_item-attributes_jsx-app_components_item-variant_item-image_jsx-ap-c1a2e1",
         "app_components_confirmation-modal_index_jsx-app_components_product-item_index_jsx-app_compone-5d0c1c",
         "pages-account-wishlist"
       ],
       "assets": [
         {
-          "name": "app_components_item-variant_item-attributes_jsx-app_components_item-variant_item-image_jsx-ap-c1a2e1.js"
-        },
-        {
           "name": "app_components_product-view_index_jsx.js"
         },
         {
-          "name": "app_components_product-view_index_jsx.578d043247adf22703fb.hot-update.js"
+          "name": "app_components_product-view_index_jsx.eb2a94975d2911376710.hot-update.js"
+        },
+        {
+          "name": "app_components_item-variant_item-attributes_jsx-app_components_item-variant_item-image_jsx-ap-c1a2e1.js"
         },
         {
           "name": "app_components_confirmation-modal_index_jsx-app_components_product-item_index_jsx-app_compone-5d0c1c.js"
@@ -1070,7 +1077,7 @@
       "id": "main",
       "files": [
         "main.js",
-        "main.578d043247adf22703fb.hot-update.js"
+        "main.eb2a94975d2911376710.hot-update.js"
       ]
     },
     {
@@ -1176,16 +1183,16 @@
       ]
     },
     {
-      "id": "app_components_item-variant_item-attributes_jsx-app_components_item-variant_item-image_jsx-ap-c1a2e1",
-      "files": [
-        "app_components_item-variant_item-attributes_jsx-app_components_item-variant_item-image_jsx-ap-c1a2e1.js"
-      ]
-    },
-    {
       "id": "app_components_product-view_index_jsx",
       "files": [
         "app_components_product-view_index_jsx.js",
-        "app_components_product-view_index_jsx.578d043247adf22703fb.hot-update.js"
+        "app_components_product-view_index_jsx.eb2a94975d2911376710.hot-update.js"
+      ]
+    },
+    {
+      "id": "app_components_item-variant_item-attributes_jsx-app_components_item-variant_item-image_jsx-ap-c1a2e1",
+      "files": [
+        "app_components_item-variant_item-attributes_jsx-app_components_item-variant_item-image_jsx-ap-c1a2e1.js"
       ]
     },
     {

@@ -524,7 +524,7 @@ const ProductView = forwardRef(
                         </VStack>
 
                          {/* Show Promotions: productPromotions is the array to loop over */}
-                        <Text>Available promotions:</Text>
+                        {productPromotions && <Text>Available promotions:</Text>}
                         {/* productPromotions is destructured from prooduct.productPromotions
                             That loop will build each line.  We wiil then call the setActivePromotionId method, which will prompt
                             a re-render of the React SDK usePromotions, which will return a "promotions" object that is set to "Promos"

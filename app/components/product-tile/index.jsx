@@ -17,7 +17,8 @@ import {
     Text,
     Stack,
     useMultiStyleConfig,
-    IconButton
+    IconButton,
+    Button
 } from '@salesforce/retail-react-app/app/components/shared/ui'
 import DynamicImage from '@salesforce/retail-react-app/app/components/dynamic-image'
 
@@ -63,6 +64,7 @@ const ProductTile = (props) => {
         isFavourite,
         onFavouriteToggle,
         dynamicImageProps,
+        quickViewHandler,
         ...rest
     } = props
 
@@ -163,9 +165,17 @@ const ProductTile = (props) => {
                             }
                         }}
                     />
+
+                    <Button w={'full'} onClick={() => {
+                        quickViewHandler(product)
+                    }}>
+                        QuickView
+                    </Button>
                 </Box>
+                
             )}
         </Box>
+        
     )
 }
 

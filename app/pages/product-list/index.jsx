@@ -14,7 +14,9 @@ import {
     useCategory,
     useCustomerId,
     useProductSearch,
-    useShopperCustomersMutation
+    useShopperCustomersMutation,
+    useAccessToken,
+    useCommerceApi
 } from '@salesforce/commerce-sdk-react'
 import {useServerContext} from '@salesforce/pwa-kit-react-sdk/ssr/universal/hooks'
 
@@ -70,6 +72,7 @@ import {
 import {useToast} from '@salesforce/retail-react-app/app/hooks/use-toast'
 import useEinstein from '@salesforce/retail-react-app/app/hooks/use-einstein'
 import useActiveData from '@salesforce/retail-react-app/app/hooks/use-active-data'
+import ProductViewModal from '@salesforce/retail-react-app/app/components/product-view-modal'
 
 // Others
 import {HTTPNotFound, HTTPError} from '@salesforce/pwa-kit-react-sdk/ssr/universal/errors'
@@ -104,6 +107,7 @@ const ProductList = (props) => {
     const {isLoading: _unusedIsLoading, staticContext, ...rest} = props
     const {isOpen, onOpen, onClose} = useDisclosure()
     const {formatMessage} = useIntl()
+    const api = useCommerceApi()
     const navigate = useNavigation()
     const history = useHistory()
     const params = useParams()
@@ -119,6 +123,7 @@ const ProductList = (props) => {
     const [filtersLoading, setFiltersLoading] = useState(false)
     const [wishlistLoading, setWishlistLoading] = useState([])
     const [sortOpen, setSortOpen] = useState(false)
+    const [selectedItem, setSelectedItem] = useState(undefined)
 
     const urlParams = new URLSearchParams(location.search)
     let searchQuery = urlParams.get('q')
@@ -152,7 +157,7 @@ const ProductList = (props) => {
             keepPreviousData: true
         }
     )
-
+console.log("searchParams", productSearchResult)
     const {error, data: category} = useCategory(
         {
             parameters: {
@@ -375,6 +380,25 @@ const ProductList = (props) => {
         }
     }, [productSearchResult])
 
+    const {isOpen: isOpenView, onOpen: onOpenView, onClose: onCloseView} = useDisclosure()
+    const {getTokenWhenReady} = useAccessToken()
+
+    const quickViewHandler = async (product) => {
+        if (!product) return;
+
+        const token = await getTokenWhenReady()
+
+        const productItem = await api.shopperProducts.getProduct({
+            parameters: {id: product.productId},
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        })
+
+        setSelectedItem(productItem)
+        onOpenView()
+    }
+
     return (
         <Box
             className="sf-product-list-page"
@@ -559,16 +583,31 @@ const ProductList = (props) => {
                                                           '25vw'
                                                       ]
                                                   }}
+                                                  quickViewHandler={quickViewHandler}
                                               />
                                           )
                                       })}
+
+                            <Box>
+                                {isOpenView && (
+                                    <ProductViewModal
+                                        isOpen={isOpenView}
+                                        onOpen={onOpenView}
+                                        onClose={onCloseView}
+                                        product={selectedItem}
+                                    />
+                                )}
+                            </Box>
                             </SimpleGrid>
                             {/* Footer */}
                             <Flex
-                                justifyContent={['center', 'center', 'flex-start']}
+                                justifyContent={['center', 'center', 'center']}
                                 paddingTop={8}
                             >
-                                <Pagination currentURL={basePath} urls={pageUrls} />
+                               <Button>
+                                      Load More
+                               </Button>
+
 
                                 {/*
                             Our design doesn't call for a page size select. Show this element if you want
