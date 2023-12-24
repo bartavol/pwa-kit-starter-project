@@ -124,6 +124,7 @@ const ProductList = (props) => {
     const [wishlistLoading, setWishlistLoading] = useState([])
     const [sortOpen, setSortOpen] = useState(false)
     const [selectedItem, setSelectedItem] = useState(undefined)
+    const [offset, setOffset] = useState(25)
 
     const urlParams = new URLSearchParams(location.search)
     let searchQuery = urlParams.get('q')
@@ -157,7 +158,7 @@ const ProductList = (props) => {
             keepPreviousData: true
         }
     )
-console.log("searchParams", productSearchResult)
+
     const {error, data: category} = useCategory(
         {
             parameters: {
@@ -198,6 +199,10 @@ console.log("searchParams", productSearchResult)
         isRefetching && window.scrollTo(0, 0)
         setFiltersLoading(isRefetching)
     }, [isRefetching])
+
+    useEffect(() => {
+        setOffset(25)
+    }, [productSearchResult])
 
     /**************** Render Variables ****************/
     const basePath = `${location.pathname}${location.search}`
@@ -397,6 +402,25 @@ console.log("searchParams", productSearchResult)
 
         setSelectedItem(productItem)
         onOpenView()
+    }
+
+    const loadMore = async () => {
+        const token = await getTokenWhenReady()
+        const loadedProducts = await api.shopperSearch.productSearch({
+            parameters: {
+                ...searchParams,
+                refine: searchParams._refine,
+                offset: searchParams.offset + offset
+            },
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        })
+
+        if (loadedProducts.hits) {
+            setOffset(offset + 25)
+            productSearchResult.hits =  [...productSearchResult.hits, ...loadedProducts.hits];
+        }
     }
 
     return (
@@ -604,9 +628,11 @@ console.log("searchParams", productSearchResult)
                                 justifyContent={['center', 'center', 'center']}
                                 paddingTop={8}
                             >
-                               <Button>
+                               { (productSearchResult?.hits?.length >= productSearchResult?.total) ||
+                                <Button onClick={loadMore}>
                                       Load More
                                </Button>
+                                }
 
 
                                 {/*
